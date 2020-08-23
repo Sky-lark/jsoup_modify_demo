@@ -47,7 +47,6 @@ public class NBAController {
             e.printStackTrace();
             return "错误";
         }
-
         return document.outerHtml();
     }
 
@@ -67,5 +66,32 @@ public class NBAController {
         return document.outerHtml();
     }
 
+
+    @RequestMapping("index1")
+    public String Index1() {
+        Document document = null;
+        try {
+            document = Jsoup.connect("http://www.102345.vip/nba/").get();
+            service.filterNav(document);
+            // 处理图片url
+            Elements aTag = document.getElementsByTag("img");
+            aTag.forEach(element -> {
+                String src = element.attr("src");
+                src = "http://www.102345.vip/" + src;
+                element.attr("src", src);
+            });
+            // 处理css
+            Elements link = document.getElementsByTag("link");
+            link.forEach(element -> {
+                String href = element.attr("href");
+                href = "http://www.102345.vip/nba/" + href;
+                element.attr("href", href);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "错误";
+        }
+        return document.outerHtml();
+    }
 
 }
